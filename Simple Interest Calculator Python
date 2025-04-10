@@ -1,4 +1,3 @@
-# write your solution here
 P = float(input("Enter principal amount:"))
 R = float(input("Enter annual interest rate:"))
 T = float(input("Enter time in years:"))
