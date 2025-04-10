@@ -1,0 +1,94 @@
+CONTACTS_FILE = "contacts.txt"
+contacts = []
+
+try:
+    file = open('contacts.txt', 'r')
+    for contact in file:
+        name, phone = contact.strip().split(",")
+        contacts.append((name, phone))
+    file.close()
+except FileNotFoundError:
+    contacts = []
+
+def displayMenu():
+    print("\nMenu:")
+    print("1. View Contacts")
+    print("2. Add Contact")
+    print("3. Search Contact")
+    print("4. Remove Contact")
+    print("5. Exit")
+
+def viewContacts():
+    if len(contacts) == 0:
+        print("No contacts available.")
+    else:
+        contact_number = 1
+        for contact in contacts:
+            name = contact[0]
+            phone = contact[1]
+            print(str(contact_number) + ". Name: " + name + ", Number: " + phone)
+            contact_number += 1
+
+
+def addContact():
+    name = input("Enter contact's name: ")
+    phone = input("Enter contact's phone number: ")
+    contact_exists = False
+    for contact in contacts:
+        if contact[0] == name and contact[1] == phone:
+            contact_exists = True
+            break
+    if contact_exists:
+        print("This contact already exists.")
+    else:
+        contacts.append((name, phone))
+        saveContacts()
+        print("Contact added.")
+
+def searchContact():
+    search = input("Enter a name or part of a name to search: ").lower()
+    exist = False
+    for contact in contacts:
+        name = contact[0]
+        phone = contact[1]
+        if search in name.lower():
+            print("Name: " + name + ", Number: " + phone)
+            exist = True
+    if not exist:
+        print("No contacts found.")
+
+
+# Function to remove a contact
+def removeContact():
+    try:
+        contactNumber = int(input("Enter the contact number you want to remove: "))
+        if contactNumber >= 1 and contactNumber <= len(contacts):
+            removedContact = contacts.pop(contactNumber - 1)
+            saveContacts()
+            print("The removed contact was: " + removedContact[0] + " - " + removedContact[1])
+        else:
+            print("Not in contacts")
+    except ValueError:
+        print("Invalid contact. Please enter correct contact.")
+
+def saveContacts():
+    file = open('contacts.txt', 'w')
+    for contact in contacts:
+        file.write(contact[0] + "," + contact[1] + "\n")
+    file.close()
+
+while True:
+    displayMenu()
+    option = input("What would you like to do?: ")
+    if option == "1":
+        viewContacts()
+    elif option == "2":
+        addContact()
+    elif option == "3":
+        searchContact()
+    elif option == "4":
+        removeContact()
+    elif option == "5":
+        break
+    else:
+        print("Invalid option. Please try again.")
